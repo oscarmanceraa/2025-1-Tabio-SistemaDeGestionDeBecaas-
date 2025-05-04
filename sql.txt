@@ -1,0 +1,833 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 05-05-2025 a las 00:14:20
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Base de datos: `sgbtabioo`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `beneficiarios`
+--
+
+CREATE TABLE `beneficiarios` (
+  `id_beneficiario` bigint(20) UNSIGNED NOT NULL,
+  `id_postulacion` bigint(20) UNSIGNED NOT NULL,
+  `id_resultado` bigint(20) UNSIGNED NOT NULL,
+  `monto_beneficio` decimal(12,2) NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date DEFAULT NULL,
+  `vigente` tinyint(1) NOT NULL DEFAULT 1,
+  `id_estado` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cache`
+--
+
+CREATE TABLE `cache` (
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cache_locks`
+--
+
+CREATE TABLE `cache_locks` (
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estados`
+--
+
+CREATE TABLE `estados` (
+  `id_estado` bigint(20) UNSIGNED NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `estados`
+--
+
+INSERT INTO `estados` (`id_estado`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'Activo', NULL, NULL),
+(2, 'Inactivo', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `failed_jobs`
+--
+
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `funcionalidades`
+--
+
+CREATE TABLE `funcionalidades` (
+  `id_funcionalidad` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `modulo` varchar(50) NOT NULL,
+  `ruta` varchar(255) DEFAULT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `jobs`
+--
+
+CREATE TABLE `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `job_batches`
+--
+
+CREATE TABLE `job_batches` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext DEFAULT NULL,
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '0001_01_01_000001_create_cache_table', 1),
+(2, '0001_01_01_000002_create_jobs_table', 1),
+(3, '2024_01_01_000001_create_tipos_documento_table', 1),
+(4, '2024_01_01_000002_create_roles_table', 1),
+(5, '2024_01_01_000003_create_estados_table', 1),
+(6, '2024_01_01_000004_create_personas_table', 1),
+(7, '2024_01_01_000005_create_users_table', 1),
+(8, '2024_01_01_000007_create_notas_table', 1),
+(9, '2024_01_01_000008_create_tipos_beneficio_table', 1),
+(10, '2024_01_01_000009_create_sisben_table', 1),
+(11, '2024_01_01_000010_create_universidades_table', 1),
+(12, '2024_01_01_000011_create_programas_table', 1),
+(13, '2024_01_01_000012_create_preguntas_table', 1),
+(14, '2024_01_01_000013_create_postulaciones_table', 1),
+(15, '2024_01_01_000014_create_resultados_table', 1),
+(16, '2024_01_01_000015_create_beneficiarios_table', 1),
+(17, '2024_01_01_000016_create_recibos_universidad_table', 1),
+(18, '2024_01_01_000017_create_funcionalidades_table', 1),
+(19, '2024_01_01_000018_create_rol_funcionalidad_table', 1),
+(20, '2025_04_28_003603_create_sessions_table', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notas`
+--
+
+CREATE TABLE `notas` (
+  `id_nota` bigint(20) UNSIGNED NOT NULL,
+  `id_persona` bigint(20) UNSIGNED NOT NULL,
+  `promedio` decimal(4,2) NOT NULL,
+  `observaciones` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `personas`
+--
+
+CREATE TABLE `personas` (
+  `id_persona` bigint(20) UNSIGNED NOT NULL,
+  `id_tipo_documento` tinyint(4) NOT NULL,
+  `primer_nombre` varchar(50) NOT NULL,
+  `segundo_nombre` varchar(50) DEFAULT NULL,
+  `primer_apellido` varchar(50) NOT NULL,
+  `segundo_apellido` varchar(50) DEFAULT NULL,
+  `numero_documento` varchar(20) NOT NULL,
+  `fecha_exp_documento` date NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `observaciones` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `personas`
+--
+
+INSERT INTO `personas` (`id_persona`, `id_tipo_documento`, `primer_nombre`, `segundo_nombre`, `primer_apellido`, `segundo_apellido`, `numero_documento`, `fecha_exp_documento`, `direccion`, `observaciones`, `created_at`, `updated_at`) VALUES
+(1, 1, 'oscar', 'daniel', 'mancera', 'duarte', '12345678', '2025-04-15', 'crr7#', NULL, '2025-04-28 05:56:55', '2025-04-28 05:56:55'),
+(2, 1, 'oscar', 'daniel', 'mancera', 'duarte', '123456789', '2025-04-16', 'crr7#', NULL, '2025-04-28 07:18:41', '2025-04-28 07:18:41'),
+(3, 1, 'oscar', 'daniel', 'mancera', 'duarte', '1234567890', '2025-04-17', 'crr7#', NULL, '2025-04-29 04:49:08', '2025-04-29 04:49:08'),
+(4, 1, 'oscar', 'daniel', 'mancera', 'duarte', '12345678901', '2025-05-13', 'crr7#', NULL, '2025-05-02 22:49:01', '2025-05-02 22:49:01');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `postulaciones`
+--
+
+CREATE TABLE `postulaciones` (
+  `id_postulacion` bigint(20) UNSIGNED NOT NULL,
+  `id_persona` bigint(20) UNSIGNED NOT NULL,
+  `id_tipo_beneficio` tinyint(4) NOT NULL,
+  `cantidad_postulaciones` tinyint(4) NOT NULL DEFAULT 1,
+  `semestre` tinyint(4) NOT NULL,
+  `id_universidad` bigint(20) UNSIGNED NOT NULL,
+  `id_programa` bigint(20) UNSIGNED NOT NULL,
+  `id_sisben` tinyint(4) NOT NULL,
+  `id_nota` bigint(20) UNSIGNED NOT NULL,
+  `id_pregunta` bigint(20) UNSIGNED NOT NULL,
+  `fecha_postulacion` date NOT NULL DEFAULT '2025-04-28',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `preguntas`
+--
+
+CREATE TABLE `preguntas` (
+  `id_pregunta` bigint(20) UNSIGNED NOT NULL,
+  `horas_sociales` tinyint(1) NOT NULL DEFAULT 0,
+  `cantidad_horas_sociales` int(11) DEFAULT NULL,
+  `obs_horas` varchar(255) DEFAULT NULL,
+  `discapacidad` tinyint(1) NOT NULL DEFAULT 0,
+  `tipo_discapacidad` varchar(100) DEFAULT NULL,
+  `obs_discapacidad` varchar(255) DEFAULT NULL,
+  `colegio_publico` tinyint(1) NOT NULL DEFAULT 0,
+  `nombre_colegio` varchar(255) DEFAULT NULL,
+  `madre_cabeza_familia` tinyint(1) NOT NULL DEFAULT 0,
+  `victima_conflicto` tinyint(1) NOT NULL DEFAULT 0,
+  `declaracion_juramentada` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `programas`
+--
+
+CREATE TABLE `programas` (
+  `id_programa` bigint(20) UNSIGNED NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `id_universidad` bigint(20) UNSIGNED NOT NULL,
+  `valor_matricula` decimal(12,2) NOT NULL,
+  `puntaje` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `recibos_universidad`
+--
+
+CREATE TABLE `recibos_universidad` (
+  `id_recibo` bigint(20) UNSIGNED NOT NULL,
+  `id_beneficiario` bigint(20) UNSIGNED NOT NULL,
+  `numero_recibo` varchar(50) NOT NULL,
+  `fecha_recibo` date NOT NULL,
+  `valor_recibo` decimal(12,2) NOT NULL,
+  `valor_pagado` decimal(12,2) NOT NULL,
+  `observaciones` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `resultados`
+--
+
+CREATE TABLE `resultados` (
+  `id_resultado` bigint(20) UNSIGNED NOT NULL,
+  `id_postulacion` bigint(20) UNSIGNED NOT NULL,
+  `puntaje_total` decimal(5,2) NOT NULL,
+  `aprobado` tinyint(1) NOT NULL DEFAULT 0,
+  `fecha_evaluacion` date NOT NULL DEFAULT '2025-04-28',
+  `observaciones` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `roles`
+--
+
+CREATE TABLE `roles` (
+  `id_rol` tinyint(4) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `roles`
+--
+
+INSERT INTO `roles` (`id_rol`, `nombre`, `descripcion`, `created_at`, `updated_at`) VALUES
+(1, 'Administrador', NULL, NULL, NULL),
+(2, 'Usuario', NULL, NULL, NULL),
+(3, 'Evaluador', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `rol_funcionalidad`
+--
+
+CREATE TABLE `rol_funcionalidad` (
+  `id_rol_funcionalidad` int(11) NOT NULL,
+  `id_rol` tinyint(4) NOT NULL,
+  `id_funcionalidad` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('6XCY101gjlHScsYRaKW9bcjL1CtGUpU5aUuZ0QG2', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoic3dvV3gwQzdYYjZaTUJma0t1VDlleGVCWW5aYkhpZUZqQjRiNzRkZCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjQ7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzQ2MjA4MTU5O319', 1746208159),
+('c3503op31iLqVAnNY9uhUlqu56jQVbz5HOjd1yvh', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiWVJMOGRmS3AwckJzd0VkVWJFZGJZRWtTZ09NcXRDbWJxVGV3RUQ0RiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9fQ==', 1745807151),
+('d6ybZgLJZauE8wMvFrPyJn8IVWcmxhn8TtSEl5X8', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiQTZrc096TlQ0Q1VJU0c4anUzTkxRWkR2WDRKcVN6VUY4bld4bWFwQiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzQ2Mzk2NzM5O319', 1746396749),
+('tA68VS1xw5qq4FsdKERFCi4LozcNHYp3SDIIoAiR', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiYjJKRzFsMFQ2WGVYbHFUQVhiTk4xazQ5ZzJDZ1dwUWdCUFlyakFrUCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yZWdpc3RlciI7fX0=', 1745885972),
+('tJPQZQEdX3LAmR5mhTo3l2b3BeO0yqpLFFYRpafA', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YToyOntzOjY6Il90b2tlbiI7czo0MDoiRlBXMDVRSmdaY1F1Uk4xN0FsRk9wdEh4S0NuWjMzOWxFbmdEVnlpMSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1745805863),
+('wFn2rF2FCytk5wwjdCw2qBh7RzF3w9dFS3Hrzd3b', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoicVdRSjhxQ1JMUGNsNnNzYmRIejVUVGtSVm5JVEU5Q09GcjRCRUNjSyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fX0=', 1746208259);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sisben`
+--
+
+CREATE TABLE `sisben` (
+  `id_sisben` tinyint(4) NOT NULL,
+  `letra` char(1) NOT NULL,
+  `numero` tinyint(4) NOT NULL,
+  `puntaje` decimal(5,2) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipos_beneficio`
+--
+
+CREATE TABLE `tipos_beneficio` (
+  `id_tipo_beneficio` tinyint(4) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipos_documento`
+--
+
+CREATE TABLE `tipos_documento` (
+  `id_tipo_documento` tinyint(4) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tipos_documento`
+--
+
+INSERT INTO `tipos_documento` (`id_tipo_documento`, `nombre`, `created_at`, `updated_at`) VALUES
+(1, 'Cédula de Ciudadanía', NULL, NULL),
+(2, 'Cédula de Extranjería', NULL, NULL),
+(3, 'Tarjeta de Identidad', NULL, NULL),
+(4, 'Pasaporte', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `universidades`
+--
+
+CREATE TABLE `universidades` (
+  `id_universidad` bigint(20) UNSIGNED NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `nit` varchar(50) NOT NULL,
+  `caracter` varchar(50) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `users`
+--
+
+CREATE TABLE `users` (
+  `id_user` bigint(20) UNSIGNED NOT NULL,
+  `id_persona` bigint(20) UNSIGNED NOT NULL,
+  `id_rol` tinyint(4) NOT NULL,
+  `id_estado` bigint(20) UNSIGNED NOT NULL,
+  `codigo` varchar(30) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `users`
+--
+
+INSERT INTO `users` (`id_user`, `id_persona`, `id_rol`, `id_estado`, `codigo`, `email`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 1, 2, 1, 'USR0000001', 'oscarmancera20@gmail.com', 'aaaa', '$2y$12$kZZpVrHwI81fYKgj7iGWDu57dnH8wVBfeOrONQlUW605glKabhA7O', 'J8hbAoV1FxryTqOAJXEpH0LVMNY9XGQdpk4XmbOE3lptnqLpu93UvCy4qDpK', '2025-04-28 05:56:55', '2025-04-28 05:56:55'),
+(2, 2, 2, 1, 'USR0000002', 'omancera@ucundinamarca.edu.co', 'admin', '$2y$12$jsms1lJ4HR9z6mQWz7h2Rupdhj5PlTpvMIIvtc8ZHEkkj6R6T0wR2', NULL, '2025-04-28 07:18:41', '2025-04-28 07:18:41'),
+(3, 3, 2, 1, 'USR0000003', 'o20@gmail.com', 'asdfghjk', '$2y$12$jKwpYhAdmsuP9QWoALO0LeeIdU0StcLs92oQSJ59ZckmOHuIffJpK', NULL, '2025-04-29 04:49:10', '2025-04-29 04:49:10'),
+(4, 4, 2, 1, 'USR0000004', 'zo20@gmail.com', 'omancera', '$2y$12$GrKyygw97f36VCl2vcOegeqJpYsrJR3iD47oHKbJFpIsN9CAw9ONO', NULL, '2025-05-02 22:49:03', '2025-05-02 22:49:03');
+
+--
+-- Índices para tablas volcadas
+--
+
+--
+-- Indices de la tabla `beneficiarios`
+--
+ALTER TABLE `beneficiarios`
+  ADD PRIMARY KEY (`id_beneficiario`),
+  ADD KEY `beneficiarios_id_postulacion_foreign` (`id_postulacion`),
+  ADD KEY `beneficiarios_id_resultado_foreign` (`id_resultado`),
+  ADD KEY `beneficiarios_id_estado_foreign` (`id_estado`);
+
+--
+-- Indices de la tabla `cache`
+--
+ALTER TABLE `cache`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Indices de la tabla `cache_locks`
+--
+ALTER TABLE `cache_locks`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Indices de la tabla `estados`
+--
+ALTER TABLE `estados`
+  ADD PRIMARY KEY (`id_estado`);
+
+--
+-- Indices de la tabla `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
+-- Indices de la tabla `funcionalidades`
+--
+ALTER TABLE `funcionalidades`
+  ADD PRIMARY KEY (`id_funcionalidad`);
+
+--
+-- Indices de la tabla `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jobs_queue_index` (`queue`);
+
+--
+-- Indices de la tabla `job_batches`
+--
+ALTER TABLE `job_batches`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `notas`
+--
+ALTER TABLE `notas`
+  ADD PRIMARY KEY (`id_nota`),
+  ADD KEY `notas_id_persona_foreign` (`id_persona`);
+
+--
+-- Indices de la tabla `personas`
+--
+ALTER TABLE `personas`
+  ADD PRIMARY KEY (`id_persona`),
+  ADD UNIQUE KEY `personas_numero_documento_unique` (`numero_documento`),
+  ADD KEY `personas_id_tipo_documento_foreign` (`id_tipo_documento`);
+
+--
+-- Indices de la tabla `postulaciones`
+--
+ALTER TABLE `postulaciones`
+  ADD PRIMARY KEY (`id_postulacion`),
+  ADD KEY `postulaciones_id_persona_foreign` (`id_persona`),
+  ADD KEY `postulaciones_id_tipo_beneficio_foreign` (`id_tipo_beneficio`),
+  ADD KEY `postulaciones_id_universidad_foreign` (`id_universidad`),
+  ADD KEY `postulaciones_id_programa_foreign` (`id_programa`),
+  ADD KEY `postulaciones_id_sisben_foreign` (`id_sisben`),
+  ADD KEY `postulaciones_id_nota_foreign` (`id_nota`),
+  ADD KEY `postulaciones_id_pregunta_foreign` (`id_pregunta`);
+
+--
+-- Indices de la tabla `preguntas`
+--
+ALTER TABLE `preguntas`
+  ADD PRIMARY KEY (`id_pregunta`);
+
+--
+-- Indices de la tabla `programas`
+--
+ALTER TABLE `programas`
+  ADD PRIMARY KEY (`id_programa`),
+  ADD KEY `programas_id_universidad_foreign` (`id_universidad`);
+
+--
+-- Indices de la tabla `recibos_universidad`
+--
+ALTER TABLE `recibos_universidad`
+  ADD PRIMARY KEY (`id_recibo`),
+  ADD KEY `recibos_universidad_id_beneficiario_foreign` (`id_beneficiario`);
+
+--
+-- Indices de la tabla `resultados`
+--
+ALTER TABLE `resultados`
+  ADD PRIMARY KEY (`id_resultado`),
+  ADD KEY `resultados_id_postulacion_foreign` (`id_postulacion`);
+
+--
+-- Indices de la tabla `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id_rol`);
+
+--
+-- Indices de la tabla `rol_funcionalidad`
+--
+ALTER TABLE `rol_funcionalidad`
+  ADD PRIMARY KEY (`id_rol_funcionalidad`),
+  ADD UNIQUE KEY `rol_funcionalidad_id_rol_id_funcionalidad_unique` (`id_rol`,`id_funcionalidad`),
+  ADD KEY `rol_funcionalidad_id_funcionalidad_foreign` (`id_funcionalidad`);
+
+--
+-- Indices de la tabla `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessions_user_id_index` (`user_id`),
+  ADD KEY `sessions_last_activity_index` (`last_activity`);
+
+--
+-- Indices de la tabla `sisben`
+--
+ALTER TABLE `sisben`
+  ADD PRIMARY KEY (`id_sisben`);
+
+--
+-- Indices de la tabla `tipos_beneficio`
+--
+ALTER TABLE `tipos_beneficio`
+  ADD PRIMARY KEY (`id_tipo_beneficio`);
+
+--
+-- Indices de la tabla `tipos_documento`
+--
+ALTER TABLE `tipos_documento`
+  ADD PRIMARY KEY (`id_tipo_documento`);
+
+--
+-- Indices de la tabla `universidades`
+--
+ALTER TABLE `universidades`
+  ADD PRIMARY KEY (`id_universidad`);
+
+--
+-- Indices de la tabla `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id_user`),
+  ADD UNIQUE KEY `users_codigo_unique` (`codigo`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `users_username_unique` (`username`),
+  ADD KEY `users_id_persona_foreign` (`id_persona`),
+  ADD KEY `users_id_rol_foreign` (`id_rol`),
+  ADD KEY `users_id_estado_foreign` (`id_estado`);
+
+--
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `beneficiarios`
+--
+ALTER TABLE `beneficiarios`
+  MODIFY `id_beneficiario` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `estados`
+--
+ALTER TABLE `estados`
+  MODIFY `id_estado` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT de la tabla `notas`
+--
+ALTER TABLE `notas`
+  MODIFY `id_nota` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `personas`
+--
+ALTER TABLE `personas`
+  MODIFY `id_persona` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `postulaciones`
+--
+ALTER TABLE `postulaciones`
+  MODIFY `id_postulacion` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `preguntas`
+--
+ALTER TABLE `preguntas`
+  MODIFY `id_pregunta` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `programas`
+--
+ALTER TABLE `programas`
+  MODIFY `id_programa` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `recibos_universidad`
+--
+ALTER TABLE `recibos_universidad`
+  MODIFY `id_recibo` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `resultados`
+--
+ALTER TABLE `resultados`
+  MODIFY `id_resultado` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `universidades`
+--
+ALTER TABLE `universidades`
+  MODIFY `id_universidad` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `users`
+--
+ALTER TABLE `users`
+  MODIFY `id_user` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `beneficiarios`
+--
+ALTER TABLE `beneficiarios`
+  ADD CONSTRAINT `beneficiarios_id_estado_foreign` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`),
+  ADD CONSTRAINT `beneficiarios_id_postulacion_foreign` FOREIGN KEY (`id_postulacion`) REFERENCES `postulaciones` (`id_postulacion`),
+  ADD CONSTRAINT `beneficiarios_id_resultado_foreign` FOREIGN KEY (`id_resultado`) REFERENCES `resultados` (`id_resultado`);
+
+--
+-- Filtros para la tabla `notas`
+--
+ALTER TABLE `notas`
+  ADD CONSTRAINT `notas_id_persona_foreign` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`);
+
+--
+-- Filtros para la tabla `personas`
+--
+ALTER TABLE `personas`
+  ADD CONSTRAINT `personas_id_tipo_documento_foreign` FOREIGN KEY (`id_tipo_documento`) REFERENCES `tipos_documento` (`id_tipo_documento`);
+
+--
+-- Filtros para la tabla `postulaciones`
+--
+ALTER TABLE `postulaciones`
+  ADD CONSTRAINT `postulaciones_id_nota_foreign` FOREIGN KEY (`id_nota`) REFERENCES `notas` (`id_nota`),
+  ADD CONSTRAINT `postulaciones_id_persona_foreign` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`),
+  ADD CONSTRAINT `postulaciones_id_pregunta_foreign` FOREIGN KEY (`id_pregunta`) REFERENCES `preguntas` (`id_pregunta`),
+  ADD CONSTRAINT `postulaciones_id_programa_foreign` FOREIGN KEY (`id_programa`) REFERENCES `programas` (`id_programa`),
+  ADD CONSTRAINT `postulaciones_id_sisben_foreign` FOREIGN KEY (`id_sisben`) REFERENCES `sisben` (`id_sisben`),
+  ADD CONSTRAINT `postulaciones_id_tipo_beneficio_foreign` FOREIGN KEY (`id_tipo_beneficio`) REFERENCES `tipos_beneficio` (`id_tipo_beneficio`),
+  ADD CONSTRAINT `postulaciones_id_universidad_foreign` FOREIGN KEY (`id_universidad`) REFERENCES `universidades` (`id_universidad`);
+
+--
+-- Filtros para la tabla `programas`
+--
+ALTER TABLE `programas`
+  ADD CONSTRAINT `programas_id_universidad_foreign` FOREIGN KEY (`id_universidad`) REFERENCES `universidades` (`id_universidad`);
+
+--
+-- Filtros para la tabla `recibos_universidad`
+--
+ALTER TABLE `recibos_universidad`
+  ADD CONSTRAINT `recibos_universidad_id_beneficiario_foreign` FOREIGN KEY (`id_beneficiario`) REFERENCES `beneficiarios` (`id_beneficiario`);
+
+--
+-- Filtros para la tabla `resultados`
+--
+ALTER TABLE `resultados`
+  ADD CONSTRAINT `resultados_id_postulacion_foreign` FOREIGN KEY (`id_postulacion`) REFERENCES `postulaciones` (`id_postulacion`);
+
+--
+-- Filtros para la tabla `rol_funcionalidad`
+--
+ALTER TABLE `rol_funcionalidad`
+  ADD CONSTRAINT `rol_funcionalidad_id_funcionalidad_foreign` FOREIGN KEY (`id_funcionalidad`) REFERENCES `funcionalidades` (`id_funcionalidad`),
+  ADD CONSTRAINT `rol_funcionalidad_id_rol_foreign` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`);
+
+--
+-- Filtros para la tabla `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_id_estado_foreign` FOREIGN KEY (`id_estado`) REFERENCES `estados` (`id_estado`),
+  ADD CONSTRAINT `users_id_persona_foreign` FOREIGN KEY (`id_persona`) REFERENCES `personas` (`id_persona`),
+  ADD CONSTRAINT `users_id_rol_foreign` FOREIGN KEY (`id_rol`) REFERENCES `roles` (`id_rol`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
