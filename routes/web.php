@@ -18,7 +18,20 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class, 'register']);
 
-// Ruta del home (protegida)
-Route::get('/home', function () {
-    return view('home');
-})->middleware('auth')->name('home');
+// Rutas protegidas por rol
+Route::middleware(['auth'])->group(function () {
+    // Rutas de Administrador
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->middleware('role:1')->name('admin.dashboard');
+
+    // Rutas de Usuario
+    Route::get('/user/dashboard', function () {
+        return view('user.dashboard');
+    })->middleware('role:2')->name('user.dashboard');
+
+    // Rutas de Evaluador
+    Route::get('/evaluador/dashboard', function () {
+        return view('evaluador.dashboard');
+    })->middleware('role:3')->name('evaluador.dashboard');
+});
