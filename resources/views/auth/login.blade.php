@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="text-center mb-4">Inicio de Sesión</h2>
+<div class="login-container">
+    <div class="login-card">
+        <div class="logo">
+            <img src="{{ asset('images/logo.png') }}" alt="Logo">
+        </div>
+        <h1>Inicio de Sesión</h1>
                     
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
@@ -21,9 +21,8 @@
                             </div>
                         @endif
 
-                        <div class="entradas-de-texto-govco">
-                            <label for="username">Nombre de Usuario<span aria-required="true">*</span></label>
-                            <input type="text" name="username" id="username" value="{{ old('username') }}" placeholder="Ingrese su nombre de usuario" required autofocus />
+                        <div>
+                            <input type="text" name="username" id="username" value="{{ old('username') }}" placeholder="Nombre de Usuario" required autofocus>
                         </div>
 
                         <div class="entradas-de-texto-govco">
