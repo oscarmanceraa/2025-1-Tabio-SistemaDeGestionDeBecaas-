@@ -1,0 +1,99 @@
+.register-container {
+    background: #f5f5f5;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+.register-card {
+    background: #fff;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+    transition: all 0.3s ease;
+}
+
+/* Estilos para filas del formulario */
+.form-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Campos de entrada */
+.register-card input:not([type="checkbox"]),
+.register-card select {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.register-card input:focus,
+.register-card select:focus {
+    border-color: #FF6C00;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 108, 0, 0.1);
+}
+
+/* Botón de registro */
+.btn-register {
+    width: 100%;
+    padding: 1rem;
+    background: #FF6C00;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-register:hover {
+    background: #e65c00;
+}
+
+/* Enlaces */
+.register-links {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.register-links a {
+    color: #FF6C00;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.register-links a:hover {
+    color: #e65c00;
+}
+
+/* Mensajes de error */
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .register-card {
+        padding: 2rem;
+        margin: 1rem;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

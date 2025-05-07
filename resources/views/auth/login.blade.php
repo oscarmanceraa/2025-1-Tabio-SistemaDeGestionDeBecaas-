@@ -7,6 +7,7 @@
             <img src="{{ asset('images/logo.png') }}" alt="Logo">
         </div>
         <h1>Inicio de Sesión</h1>
+        <h2>SGB Tabio</h2>
                     
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
