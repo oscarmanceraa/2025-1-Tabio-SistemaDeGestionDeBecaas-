@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-05-2025 a las 00:14:20
+-- Tiempo de generación: 07-05-2025 a las 06:39:26
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -390,12 +390,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('6XCY101gjlHScsYRaKW9bcjL1CtGUpU5aUuZ0QG2', 4, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoic3dvV3gwQzdYYjZaTUJma0t1VDlleGVCWW5aYkhpZUZqQjRiNzRkZCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjQ7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzQ2MjA4MTU5O319', 1746208159),
-('c3503op31iLqVAnNY9uhUlqu56jQVbz5HOjd1yvh', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiWVJMOGRmS3AwckJzd0VkVWJFZGJZRWtTZ09NcXRDbWJxVGV3RUQ0RiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6MjY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9ob21lIjt9fQ==', 1745807151),
-('d6ybZgLJZauE8wMvFrPyJn8IVWcmxhn8TtSEl5X8', 2, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiQTZrc096TlQ0Q1VJU0c4anUzTkxRWkR2WDRKcVN6VUY4bld4bWFwQiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzQ2Mzk2NzM5O319', 1746396749),
-('tA68VS1xw5qq4FsdKERFCi4LozcNHYp3SDIIoAiR', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiYjJKRzFsMFQ2WGVYbHFUQVhiTk4xazQ5ZzJDZ1dwUWdCUFlyakFrUCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9yZWdpc3RlciI7fX0=', 1745885972),
-('tJPQZQEdX3LAmR5mhTo3l2b3BeO0yqpLFFYRpafA', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YToyOntzOjY6Il90b2tlbiI7czo0MDoiRlBXMDVRSmdaY1F1Uk4xN0FsRk9wdEh4S0NuWjMzOWxFbmdEVnlpMSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1745805863),
-('wFn2rF2FCytk5wwjdCw2qBh7RzF3w9dFS3Hrzd3b', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoicVdRSjhxQ1JMUGNsNnNzYmRIejVUVGtSVm5JVEU5Q09GcjRCRUNjSyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mjc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9sb2dpbiI7fX0=', 1746208259);
+('tmFajKd6WaXXBjOcTJjyBehP5oryV41EJiAOTS2O', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiOGU0UGdqVXRLa1BEdnc2SXhOQ3pWY1FmUDc2ZzNFZXhwUU1UV0Z0ayI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC91c2VyL2Rhc2hib2FyZCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7czo0OiJhdXRoIjthOjE6e3M6MjE6InBhc3N3b3JkX2NvbmZpcm1lZF9hdCI7aToxNzQ2NTkyNTcwO319', 1746592571);
 
 -- --------------------------------------------------------
 
@@ -411,6 +406,63 @@ CREATE TABLE `sisben` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `sisben`
+--
+
+INSERT INTO `sisben` (`id_sisben`, `letra`, `numero`, `puntaje`, `created_at`, `updated_at`) VALUES
+(1, 'A', 1, 100.00, NULL, NULL),
+(2, 'A', 2, 95.00, NULL, NULL),
+(3, 'A', 3, 90.00, NULL, NULL),
+(4, 'A', 4, 85.00, NULL, NULL),
+(5, 'A', 5, 80.00, NULL, NULL),
+(6, 'B', 1, 75.00, NULL, NULL),
+(7, 'B', 2, 70.00, NULL, NULL),
+(8, 'B', 3, 65.00, NULL, NULL),
+(9, 'B', 4, 60.00, NULL, NULL),
+(10, 'B', 5, 55.00, NULL, NULL),
+(11, 'B', 6, 52.50, NULL, NULL),
+(12, 'B', 7, 50.00, NULL, NULL),
+(13, 'C', 1, 45.00, NULL, NULL),
+(14, 'C', 2, 42.00, NULL, NULL),
+(15, 'C', 3, 39.00, NULL, NULL),
+(16, 'C', 4, 36.00, NULL, NULL),
+(17, 'C', 5, 33.00, NULL, NULL),
+(18, 'C', 6, 30.00, NULL, NULL),
+(19, 'C', 7, 27.00, NULL, NULL),
+(20, 'C', 8, 24.00, NULL, NULL),
+(21, 'C', 9, 21.00, NULL, NULL),
+(22, 'C', 10, 18.00, NULL, NULL),
+(23, 'C', 11, 15.00, NULL, NULL),
+(24, 'C', 12, 14.00, NULL, NULL),
+(25, 'C', 13, 13.00, NULL, NULL),
+(26, 'C', 14, 12.00, NULL, NULL),
+(27, 'C', 15, 11.00, NULL, NULL),
+(28, 'C', 16, 10.50, NULL, NULL),
+(29, 'C', 17, 10.25, NULL, NULL),
+(30, 'C', 18, 10.00, NULL, NULL),
+(31, 'D', 1, 5.00, NULL, NULL),
+(32, 'D', 2, 4.50, NULL, NULL),
+(33, 'D', 3, 4.00, NULL, NULL),
+(34, 'D', 4, 3.50, NULL, NULL),
+(35, 'D', 5, 3.00, NULL, NULL),
+(36, 'D', 6, 2.75, NULL, NULL),
+(37, 'D', 7, 2.50, NULL, NULL),
+(38, 'D', 8, 2.25, NULL, NULL),
+(39, 'D', 9, 2.00, NULL, NULL),
+(40, 'D', 10, 1.75, NULL, NULL),
+(41, 'D', 11, 1.50, NULL, NULL),
+(42, 'D', 12, 1.40, NULL, NULL),
+(43, 'D', 13, 1.30, NULL, NULL),
+(44, 'D', 14, 1.20, NULL, NULL),
+(45, 'D', 15, 1.10, NULL, NULL),
+(46, 'D', 16, 1.05, NULL, NULL),
+(47, 'D', 17, 1.03, NULL, NULL),
+(48, 'D', 18, 1.02, NULL, NULL),
+(49, 'D', 19, 1.01, NULL, NULL),
+(50, 'D', 20, 1.01, NULL, NULL),
+(51, 'D', 21, 1.00, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -489,10 +541,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `id_persona`, `id_rol`, `id_estado`, `codigo`, `email`, `username`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 1, 2, 1, 'USR0000001', 'oscarmancera20@gmail.com', 'aaaa', '$2y$12$kZZpVrHwI81fYKgj7iGWDu57dnH8wVBfeOrONQlUW605glKabhA7O', 'J8hbAoV1FxryTqOAJXEpH0LVMNY9XGQdpk4XmbOE3lptnqLpu93UvCy4qDpK', '2025-04-28 05:56:55', '2025-04-28 05:56:55'),
-(2, 2, 2, 1, 'USR0000002', 'omancera@ucundinamarca.edu.co', 'admin', '$2y$12$jsms1lJ4HR9z6mQWz7h2Rupdhj5PlTpvMIIvtc8ZHEkkj6R6T0wR2', NULL, '2025-04-28 07:18:41', '2025-04-28 07:18:41'),
+(1, 1, 2, 1, 'USR0000001', 'oscarmancera20@gmail.com', 'aaaa', '$2y$12$kZZpVrHwI81fYKgj7iGWDu57dnH8wVBfeOrONQlUW605glKabhA7O', 'BEb1NTmWpvKAdjv5Ca8Ou96s1Va6nEUAwh3RUHpxYEY3gkUvUQ0mbSqznlAJ', '2025-04-28 05:56:55', '2025-04-28 05:56:55'),
+(2, 2, 1, 1, 'USR0000002', 'omancera@ucundinamarca.edu.co', 'admin', '$2y$12$jsms1lJ4HR9z6mQWz7h2Rupdhj5PlTpvMIIvtc8ZHEkkj6R6T0wR2', NULL, '2025-04-28 07:18:41', '2025-04-28 07:18:41'),
 (3, 3, 2, 1, 'USR0000003', 'o20@gmail.com', 'asdfghjk', '$2y$12$jKwpYhAdmsuP9QWoALO0LeeIdU0StcLs92oQSJ59ZckmOHuIffJpK', NULL, '2025-04-29 04:49:10', '2025-04-29 04:49:10'),
-(4, 4, 2, 1, 'USR0000004', 'zo20@gmail.com', 'omancera', '$2y$12$GrKyygw97f36VCl2vcOegeqJpYsrJR3iD47oHKbJFpIsN9CAw9ONO', NULL, '2025-05-02 22:49:03', '2025-05-02 22:49:03');
+(4, 4, 3, 1, 'USR0000004', 'zo20@gmail.com', 'omancera', '$2y$12$GrKyygw97f36VCl2vcOegeqJpYsrJR3iD47oHKbJFpIsN9CAw9ONO', NULL, '2025-05-02 22:49:03', '2025-05-02 22:49:03');
 
 --
 -- Índices para tablas volcadas
@@ -745,6 +797,12 @@ ALTER TABLE `recibos_universidad`
 --
 ALTER TABLE `resultados`
   MODIFY `id_resultado` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `sisben`
+--
+ALTER TABLE `sisben`
+  MODIFY `id_sisben` tinyint(4) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT de la tabla `universidades`

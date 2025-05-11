@@ -29,9 +29,25 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user/dashboard', function () {
         return view('user.dashboard');
     })->middleware('role:2')->name('user.dashboard');
+    
+    // Rutas de Postulaciones para Usuarios
+    Route::middleware(['role:2'])->group(function () {
+        Route::get('/postulaciones/crear', [App\Http\Controllers\PostulacionController::class, 'create'])->name('postulaciones.create');
+        Route::post('/postulaciones', [App\Http\Controllers\PostulacionController::class, 'store'])->name('postulaciones.store');
+    });
+    
+    // Ruta para obtener programas por universidad (AJAX)
+    Route::get('/api/universidades/{id_universidad}/programas', [App\Http\Controllers\PostulacionController::class, 'getProgramasByUniversidad']);
 
     // Rutas de Evaluador
     Route::get('/evaluador/dashboard', function () {
         return view('evaluador.dashboard');
     })->middleware('role:3')->name('evaluador.dashboard');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/documentos/{file}', function ($file) {
+            return view('evaluador.dashboard');
+        })->name('secure.download')->middleware('can:view-document');
+        Route::post('/user/upload', [UserDocumentController::class, 'store'])->name('user.upload');
+    });
 });
