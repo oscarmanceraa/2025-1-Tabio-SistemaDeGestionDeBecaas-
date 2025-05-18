@@ -19,4 +19,9 @@ class Persona extends Model
         'direccion',
         'observaciones'
     ];
+
+    public function tipoDocumento()
+    {
+        return $this->belongsTo(TipoDocumento::class, 'id_tipo_documento');
+    }
 }

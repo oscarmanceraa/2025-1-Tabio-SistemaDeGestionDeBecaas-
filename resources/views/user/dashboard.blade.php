@@ -101,8 +101,15 @@
                     </div>
                     <div class="form-group">
                         <label>Tipo de documento:</label>
-                        <select disabled>
-                          <option>{{ Auth::user()->persona->tipo_documento ?? 'Tipo de Documento' }}</option>
+                        <select name="tipo_documento" disabled>
+                            @php
+                                $tipos_documento = \App\Models\TipoDocumento::all();
+                            @endphp
+                            @foreach($tipos_documento as $tipo)
+                                <option value="{{ $tipo->id_tipo_documento }}" {{ Auth::user()->persona->id_tipo_documento == $tipo->id_tipo_documento ? 'selected' : '' }}>
+                                    {{ $tipo->nombre }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     
@@ -112,34 +119,14 @@
                                value="{{ old('numero_documento', Auth::user()->persona->numero_documento) }}" readonly />
                     </div>
                     <div class="form-group">
+                        <label>Dirección:</label>
+                        <input type="text" name="direccion" 
+                               value="{{ old('direccion', Auth::user()->persona->direccion) }}" required />
+                    </div>
+                    <div class="form-group">
                         <label>Fecha de Expedición:</label>
-                        <input type="date" name="fecha_expedicion" 
-                               value="{{ old('fecha_expedicion', Auth::user()->persona->fecha_expedicion) }}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Lugar de Expedición:</label>
-                        <input type="text" name="lugar_expedicion" 
-                               value="{{ old('lugar_expedicion', Auth::user()->persona->lugar_expedicion) }}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Fecha de Nacimiento:</label>
-                        <input type="date" name="fecha_nacimiento" 
-                               value="{{ old('fecha_nacimiento', Auth::user()->persona->fecha_nacimiento) }}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Lugar de Nacimiento:</label>
-                        <input type="text" name="lugar_nacimiento" 
-                               value="{{ old('lugar_nacimiento', Auth::user()->persona->lugar_nacimiento) }}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Letra Sisbén:</label>
-                        <input type="text" name="letra_sisben" 
-                               value="{{ old('letra_sisben', Auth::user()->persona->letra_sisben) }}" />
-                    </div>
-                    <div class="form-group">
-                        <label>Número Sisbén:</label>
-                        <input type="text" name="numero_sisben" 
-                               value="{{ old('numero_sisben', Auth::user()->persona->numero_sisben) }}" />
+                        <input type="date" name="fecha_exp_documento" 
+                               value="{{ old('fecha_exp_documento', Auth::user()->persona->fecha_exp_documento ? \Carbon\Carbon::parse(Auth::user()->persona->fecha_exp_documento)->format('Y-m-d') : '') }}" required />
                     </div>
                     <div class="file-input-group">
                         <label>Certificado Sisbén:</label>
@@ -163,14 +150,6 @@
                                placeholder="Subir PDF del certificado Notas vigente">
                     </div>
                     
-                    <div class="form-group">
-                        <label>Grupo de Interés:</label>
-                        <select name="grupo_interes">
-                          <option value="">Seleccione Grupo de Interés</option>
-                          <option value="Jóvenes">Jóvenes</option>
-                          <option value="Discapacidad">Discapacidad</option>
-                        </select>
-                    </div>
                 </div>
                 
                 <h6 class="form-section-title">Datos de Postulación</h6>
@@ -245,7 +224,7 @@
                                 $sisben = \App\Models\Sisben::orderBy('letra')->orderBy('numero')->get();
                             @endphp
                             @foreach($sisben as $categoria)
-                                <option value="{{ $categoria->id_sisben }}" {{ old('id_sisben') == $categoria->id_sisben ? 'selected' : '' }}>{{ $categoria->letra }}{{ $categoria->numero }} - Puntaje: {{ $categoria->puntaje }}</option>
+                                <option value="{{ $categoria->id_sisben }}" {{ old('id_sisben') == $categoria->id_sisben ? 'selected' : '' }}>{{ $categoria->letra }}{{ $categoria->numero }}</option>
                             @endforeach
                         </select>
                         @error('id_sisben')
@@ -276,11 +255,78 @@
                         </label>
                     </div>
                     
-                    <div class="form-actions">
-                        <button type="submit" class="btn-submit">Guardar Información y Postular</button>
+                    <div class="form-group">
+                        <label>Promedio ponderado: (en este formato "4.5" "5.0")</label>
+                        @php
+                            $nota = \App\Models\Nota::where('id_persona', Auth::user()->persona->id_persona)->first();
+                        @endphp
+                        <input type="text" name="promedio" value="{{ $nota ? $nota->promedio : 'Sin promedio registrado' }}" readonly>
+                    </div>
+                
+                <h6 class="form-section-title">Información Adicional</h6>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>¿Tiene horas sociales?</label>
+                        <select name="horas_sociales" id="horas_sociales" class="@error('horas_sociales') is-invalid @enderror" required>
+                            <option value="0">No</option>
+                            <option value="1">Sí</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="cantidad_horas_div" style="display: none;">
+                        <label>Cantidad de horas sociales:</label>
+                        <input type="number" name="cantidad_horas_sociales" min="0" class="@error('cantidad_horas_sociales') is-invalid @enderror">
+                        <input type="text" name="obs_horas" placeholder="Observaciones sobre las horas sociales" class="@error('obs_horas') is-invalid @enderror">
+                    </div>
+
+                    <div class="form-group">
+                        <label>¿Tiene alguna discapacidad?</label>
+                        <select name="discapacidad" id="discapacidad" class="@error('discapacidad') is-invalid @enderror" required>
+                            <option value="0">No</option>
+                            <option value="1">Sí</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="tipo_discapacidad_div" style="display: none;">
+                        <label>Tipo de discapacidad:</label>
+                        <input type="text" name="tipo_discapacidad" class="@error('tipo_discapacidad') is-invalid @enderror">
+                        <input type="text" name="obs_discapacidad" placeholder="Observaciones sobre la discapacidad" class="@error('obs_discapacidad') is-invalid @enderror">
+                    </div>
+
+                    <div class="form-group">
+                        <label>¿Estudió en colegio público?</label>
+                        <select name="colegio_publico" class="@error('colegio_publico') is-invalid @enderror" required>
+                            <option value="0">No</option>
+                            <option value="1">Sí</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre del colegio:</label>
+                        <input type="text" name="nombre_colegio" class="@error('nombre_colegio') is-invalid @enderror" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>¿Es madre cabeza de familia?</label>
+                        <select name="madre_cabeza_familia" class="@error('madre_cabeza_familia') is-invalid @enderror" required>
+                            <option value="0">No</option>
+                            <option value="1">Sí</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>¿Es víctima del conflicto armado?</label>
+                        <select name="victima_conflicto" class="@error('victima_conflicto') is-invalid @enderror" required>
+                            <option value="0">No</option>
+                            <option value="1">Sí</option>
+                        </select>
                     </div>
                 </div>
-              </form>
+                </div>
+                    <div class="form-actions" style="margin-top: 20px; text-align: center;">
+                  <button type="submit" class="btn-submit">Guardar Información y Postular</button>
+                  </div>
+                </form>
             
           </div>
         </section>
@@ -408,6 +454,21 @@
           if (!universidadSelect) console.error("Elemento 'id_universidad' no encontrado.");
           if (!programaSelect) console.error("Elemento 'id_programa' no encontrado.");
       }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const horasSociales = document.getElementById('horas_sociales');
+        const cantidadHorasDiv = document.getElementById('cantidad_horas_div');
+        const discapacidad = document.getElementById('discapacidad');
+        const tipoDiscapacidadDiv = document.getElementById('tipo_discapacidad_div');
+
+        horasSociales.addEventListener('change', function() {
+            cantidadHorasDiv.style.display = this.value === '1' ? 'block' : 'none';
+        });
+
+        discapacidad.addEventListener('change', function() {
+            tipoDiscapacidadDiv.style.display = this.value === '1' ? 'block' : 'none';
+        });
     });
   </script>
 </body>
