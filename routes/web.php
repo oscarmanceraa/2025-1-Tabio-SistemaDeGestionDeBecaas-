@@ -39,10 +39,10 @@ Route::middleware(['auth'])->group(function () {
     // Ruta para obtener programas por universidad (AJAX)
     Route::get('/api/universidades/{id_universidad}/programas', [App\Http\Controllers\PostulacionController::class, 'getProgramasByUniversidad']);
 
+
     // Rutas de Evaluador
-    Route::get('/evaluador/dashboard', function () {
-        return view('evaluador.dashboard');
-    })->middleware('role:3')->name('evaluador.dashboard');
+    Route::get('/evaluador/dashboard', [\App\Http\Controllers\EvaluadorController::class, 'dashboard'])->middleware('role:3')->name('evaluador.dashboard');
+    Route::post('/evaluador/seleccionar-beneficiario/{id_postulacion}', [\App\Http\Controllers\EvaluadorController::class, 'seleccionarBeneficiario'])->middleware('role:3')->name('evaluador.seleccionarBeneficiario');
 
     Route::middleware(['auth'])->group(function () {
         Route::get('/documentos/{file}', function ($file) {

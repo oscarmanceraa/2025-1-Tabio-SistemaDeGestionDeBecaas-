@@ -29,19 +29,29 @@ class PostulacionController extends Controller
      */
     public function create()
     {
-        // Obtener datos para los selectores del formulario
+        // Automatizar la creación de nota si no existe para el usuario autenticado
+        $idPersona = Auth::user()->id_persona;
+        // $nota = Nota::where('id_persona', $idPersona)->first();
+        // if (!$nota) {
+        //     $nota = Nota::create([
+        //         'id_persona' => $idPersona,
+        //         'promedio' => 0,
+        //         'observaciones' => 'Nota generada automáticamente para permitir postulación'
+        //     ]);
+        // }
+
         $personas = Persona::all();
         $tiposBeneficio = TipoBeneficio::all();
         $universidades = Universidad::all();
         $sisben = Sisben::orderBy('letra')->orderBy('numero')->get();
-        $notas = Nota::where('id_persona', Auth::user()->id_persona)->get();
+        // $notas = Nota::where('id_persona', $idPersona)->get();
 
         return view('user.postulacion-form', compact(
             'personas',
             'tiposBeneficio',
             'universidades',
-            'sisben',
-            'notas'
+            'sisben'
+            // , 'notas'
         ));
     }
 
@@ -50,7 +60,7 @@ class PostulacionController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos del formulario
+        // Validar los datos del formulario y los archivos
         $request->validate([
             'id_persona' => 'required|exists:personas,id_persona',
             'id_tipo_beneficio' => 'required|exists:tipos_beneficio,id_tipo_beneficio',
@@ -72,11 +82,31 @@ class PostulacionController extends Controller
             'madre_cabeza_familia' => 'sometimes|boolean',
             'victima_conflicto' => 'sometimes|boolean',
             'declaracion_juramentada' => 'required|accepted',
+            // Validación de archivos opcionales
+            'certificado_sisben' => 'nullable|file|mimes:pdf|max:10240',
+            'acta_grado' => 'nullable|file|mimes:pdf|max:10240',
+            'certificado_discapacidad' => 'nullable|file|mimes:pdf|max:10240',
+            'certificado_notas' => 'nullable|file|mimes:pdf|max:10240',
+        ], [
+            'id_nota.required' => 'Debes seleccionar una nota promedio registrada para postularte.',
+            'id_nota.exists' => 'La nota seleccionada no es válida.'
         ]);
+        // Guardar archivos si existen
+        $archivos = [];
+        $nombresCampos = [
+            'certificado_sisben',
+            'acta_grado',
+            'certificado_discapacidad',
+            'certificado_notas',
+        ];
+        foreach ($nombresCampos as $campo) {
+            if ($request->hasFile($campo)) {
+                $archivos[$campo] = $request->file($campo)->store('archivos');
+            }
+        }
 
         // Iniciar una transacción de base de datos
         DB::beginTransaction();
-
         try {
             // Crear primero la pregunta
             $pregunta = new Pregunta();
@@ -110,8 +140,10 @@ class PostulacionController extends Controller
             // Confirmar la transacción
             DB::commit();
 
+            // Puedes guardar las rutas de los archivos en la base de datos si lo necesitas
+
             return redirect()->route('user.dashboard')
-                ->with('success', 'Postulación enviada correctamente.');
+                ->with('success', 'Postulación enviada correctamente. Archivos subidos: ' . implode(', ', array_values($archivos)));
 
         } catch (\Exception $e) {
             // Revertir la transacción en caso de error
