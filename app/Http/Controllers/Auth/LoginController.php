@@ -1,21 +1,29 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
+
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;  // Añade esta línea
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
+    /**
+     * Muestra el formulario de login.
+     */
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
     //redirecciona segun el rol
     protected function redirectTo()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $rol = DB::table('users')->where('id_user', $user->id_user)->value('id_rol');
 
         switch ($rol) {

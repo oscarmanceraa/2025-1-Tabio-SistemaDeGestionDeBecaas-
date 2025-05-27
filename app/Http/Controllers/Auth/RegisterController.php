@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Persona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -14,7 +16,7 @@ class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/user/dashboard';
 
     public function __construct()
     {
@@ -54,7 +56,7 @@ class RegisterController extends Controller
             DB::beginTransaction();
     
             // Debug information
-            \Log::info('Validation passed, creating persona with data:', [
+            Log::info('Validation passed, creating persona with data:', [
                 'request_data' => $request->all()
             ]);
     
@@ -69,7 +71,7 @@ class RegisterController extends Controller
                 'direccion' => $request->direccion,
             ]);
     
-            \Log::info('Persona created:', ['persona' => $persona->toArray()]);
+            Log::info('Persona created:', ['persona' => $persona->toArray()]);
     
             $user = User::create([
                 'id_persona' => $persona->id_persona,
@@ -81,20 +83,20 @@ class RegisterController extends Controller
                 'password' => Hash::make($request->password),
             ]);
     
-            \Log::info('User created:', ['user' => $user->toArray()]);
+            Log::info('User created:', ['user' => $user->toArray()]);
     
             DB::commit();
-            auth()->login($user);
+            Auth::login($user);
     
-            return redirect()->route('home')
+            return redirect()->route('user.dashboard')
                 ->with('success', 'Registro exitoso');
     
         } catch (\Exception $e) {
             DB::rollback();
-            \Log::error('Registration error: ' . $e->getMessage());
-            \Log::error($e->getTraceAsString());
-    
-            return back()
+            Log::error('Registration error: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+
+            return redirect()->route('register')
                 ->withInput()
                 ->withErrors(['error' => 'Error al registrar usuario: ' . $e->getMessage()]);
         }
