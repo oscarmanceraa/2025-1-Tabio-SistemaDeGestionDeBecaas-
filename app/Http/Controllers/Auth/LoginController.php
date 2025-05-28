@@ -21,22 +21,25 @@ class LoginController extends Controller
     }
 
     //redirecciona segun el rol
-    protected function redirectTo()
-    {
-        $user = Auth::user();
-        $rol = DB::table('users')->where('id_user', $user->id_user)->value('id_rol');
+    protected function authenticated(Request $request, $user)
+{
+    $rol = DB::table('users')->where('id_user', $user->id_user)->value('id_rol');
 
-        switch ($rol) {
-            case 1:
-                return '/admin/dashboard';
-            case 2:
-                return '/user/dashboard';
-            case 3:
-                return '/evaluador/dashboard';
-            default:
-                return '/home';
-        }
+    switch ($rol) {
+        case 1:
+            return redirect()->route('admin.dashboard');
+        case 2:
+            return redirect()->route('user.dashboard');
+        case 3:
+            return redirect()->route('evaluador.dashboard');
+        default:
+            Auth::logout();
+            return redirect()->route('login')->withErrors([
+                'error' => 'Tu cuenta no tiene un rol asignado válido.'
+            ]);
     }
+}
+
 
     public function __construct()
     {
