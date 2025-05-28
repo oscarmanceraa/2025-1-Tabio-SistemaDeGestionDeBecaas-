@@ -125,28 +125,16 @@
                             </div>
                         </div>
 
-                        <!-- Nota -->
+                        <!-- Promedio Ponderado -->
                         <div class="form-group row mb-3">
-                            <label for="id_nota" class="col-md-4 col-form-label text-md-right">Nota Promedio</label>
+                            <label for="promedio" class="col-md-4 col-form-label text-md-right">Promedio Ponderado</label>
                             <div class="col-md-6">
-                                @if($notas->isEmpty())
-                                    <div class="alert alert-warning">
-                                        No tienes una nota promedio registrada. Por favor, solicita a un administrador que registre tu nota antes de postularte.
-                                    </div>
-                                    <input type="hidden" name="id_nota" value="">
-                                @else
-                                    <select id="id_nota" class="form-control @error('id_nota') is-invalid @enderror" name="id_nota" required>
-                                        <option value="">Seleccione nota registrada</option>
-                                        @foreach($notas as $nota)
-                                            <option value="{{ $nota->id_nota }}">{{ $nota->promedio }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('id_nota')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                @endif
+                                <input id="promedio" type="number" step="0.01" min="0" max="5" class="form-control @error('promedio') is-invalid @enderror" name="promedio" value="{{ old('promedio') }}" required placeholder="Ejemplo: 4.50">
+                                @error('promedio')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 

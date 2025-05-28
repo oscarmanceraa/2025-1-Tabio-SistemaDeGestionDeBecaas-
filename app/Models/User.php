@@ -10,6 +10,8 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $primaryKey = 'id_user';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'id_persona',

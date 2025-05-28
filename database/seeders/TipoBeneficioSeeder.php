@@ -9,10 +9,8 @@ class TipoBeneficioSeeder extends Seeder
     public function run()
     {
         $tipos = [
-            ['id_tipo_beneficio' => 1, 'nombre' => 'Matrícula'],
-            ['id_tipo_beneficio' => 2, 'nombre' => 'Sostenimiento'],
-            ['id_tipo_beneficio' => 3, 'nombre' => 'Alimentación'],
-            ['id_tipo_beneficio' => 4, 'nombre' => 'Transporte'],
+            ['id_tipo_beneficio' => 1, 'nombre' => 'Sostenimiento', 'descripcion' => 'Apoyo económico para sostenimiento'],
+            ['id_tipo_beneficio' => 2, 'nombre' => 'Transporte', 'descripcion' => 'Apoyo económico para transporte'],
         ];
         foreach ($tipos as $tipo) {
             DB::table('tipos_beneficio')->updateOrInsert(

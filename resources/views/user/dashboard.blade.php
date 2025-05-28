@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -257,10 +258,10 @@
                     
                     <div class="form-group">
                         <label>Promedio ponderado: (en este formato "4.5" "5.0")</label>
-                        @php
-                            $nota = \App\Models\Nota::where('id_persona', Auth::user()->persona->id_persona)->first();
-                        @endphp
-                        <input type="text" name="promedio" value="{{ $nota ? $nota->promedio : 'Sin promedio registrado' }}" readonly>
+                        <input type="number" step="0.01" min="0" max="5" name="promedio" value="{{ old('promedio', isset($postulacion) ? $postulacion->promedio : '') }}" class="@error('promedio') is-invalid @enderror" required>
+                        @error('promedio')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
                     </div>
                 
                 <h6 class="form-section-title">Información Adicional</h6>
@@ -346,14 +347,27 @@
       </div>
 
       <div class="card" id="card-respuesta">
-        <!-- Eliminamos el checkbox -->
         <section id="respuesta" class="section collapsed">
           <div class="section-header" onclick="toggleSection('respuesta')">
             <h3>Respuesta</h3>
           </div>
           <div class="section-body">
-            <h5>Subheading</h5>
-            <p>Texto de ejemplo para la respuesta final.</p>
+            @if(isset($postulacion) && $postulacion && $postulacion->resultado)
+              @if($postulacion->resultado->aprobado)
+                <div class="alert alert-success">
+                  <strong>¡Felicidades!</strong> Tu postulación fue <strong>aprobada</strong>.<br>
+                  <small>Fecha de evaluación: {{ $postulacion->resultado->fecha_evaluacion }}</small>
+                </div>
+              @else
+                <div class="alert alert-danger">
+                  <strong>Postulación rechazada.</strong> Lamentablemente, tu postulación no fue aprobada.<br>
+                  <small>Fecha de evaluación: {{ $postulacion->resultado->fecha_evaluacion }}</small>
+                </div>
+              @endif
+            @else
+              <h5>Sin respuesta aún</h5>
+              <p>Cuando tu postulación sea evaluada, verás la respuesta aquí.</p>
+            @endif
           </div>
         </section>
       </div>

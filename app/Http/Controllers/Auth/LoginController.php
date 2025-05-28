@@ -21,7 +21,10 @@ class LoginController extends Controller
     }
 
     //redirecciona segun el rol
-    protected function authenticated(Request $request, $user)
+/**
+ * Redirige al dashboard correspondiente después del login según el rol del usuario.
+ */
+protected function authenticated(Request $request, $user)
 {
     $rol = DB::table('users')->where('id_user', $user->id_user)->value('id_rol');
 
@@ -35,12 +38,10 @@ class LoginController extends Controller
         default:
             Auth::logout();
             return redirect()->route('login')->withErrors([
-                'error' => 'Tu cuenta no tiene un rol asignado válido.'
+                'error' => 'Tu cuenta no tiene un rol válido asignado.'
             ]);
     }
 }
-
-
     public function __construct()
     {
         $this->middleware('guest')->except('logout');

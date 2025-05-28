@@ -72,7 +72,7 @@ class PostulacionController extends Controller
             'id_universidad' => 'required|exists:universidades,id_universidad',
             'id_programa' => 'required|exists:programas,id_programa',
             'id_sisben' => 'required|exists:sisben,id_sisben',
-            'id_nota' => 'required|exists:notas,id_nota',
+            'promedio' => 'required|numeric|min:0|max:5',
             'fecha_postulacion' => 'required|date',
             'horas_sociales' => 'sometimes|boolean',
             'cantidad_horas_sociales' => 'nullable|required_if:horas_sociales,1|integer',
@@ -85,26 +85,40 @@ class PostulacionController extends Controller
             'madre_cabeza_familia' => 'sometimes|boolean',
             'victima_conflicto' => 'sometimes|boolean',
             'declaracion_juramentada' => 'required|accepted',
-            // Validación de archivos opcionales
-            'certificado_sisben' => 'nullable|file|mimes:pdf|max:10240',
-            'acta_grado' => 'nullable|file|mimes:pdf|max:10240',
-            'certificado_discapacidad' => 'nullable|file|mimes:pdf|max:10240',
-            'certificado_notas' => 'nullable|file|mimes:pdf|max:10240',
+            // Validación de archivos obligatorios
+            'certificado_sisben' => 'required|file|mimes:pdf|max:10240',
+            'acta_grado' => 'required|file|mimes:pdf|max:10240',
+            'certificado_notas' => 'required|file|mimes:pdf|max:10240',
+            // El certificado de discapacidad solo es obligatorio si se marca discapacidad
+            'certificado_discapacidad' => 'required_if:discapacidad,1|file|mimes:pdf|max:10240',
         ], [
-            'id_nota.required' => 'Debes seleccionar una nota promedio registrada para postularte.',
-            'id_nota.exists' => 'La nota seleccionada no es válida.'
+            'promedio.required' => 'Debes ingresar tu promedio ponderado.',
+            'promedio.numeric' => 'El promedio debe ser un número.',
+            'promedio.min' => 'El promedio no puede ser menor a 0.',
+            'promedio.max' => 'El promedio no puede ser mayor a 5.',
+            'certificado_sisben.required' => 'Debes adjuntar el certificado Sisbén.',
+            'acta_grado.required' => 'Debes adjuntar el acta de grado.',
+            'certificado_notas.required' => 'Debes adjuntar el certificado de notas.',
+            'certificado_discapacidad.required_if' => 'Debes adjuntar el certificado de discapacidad si marcaste que tienes discapacidad.'
         ]);
-        // Guardar archivos si existen
+
+        // Guardar archivos y asociarlos a la postulación
         $archivos = [];
         $nombresCampos = [
             'certificado_sisben',
             'acta_grado',
-            'certificado_discapacidad',
             'certificado_notas',
         ];
+        // Solo guardar certificado_discapacidad si se marcó discapacidad
+        if ($request->has('discapacidad')) {
+            $nombresCampos[] = 'certificado_discapacidad';
+        }
+
         foreach ($nombresCampos as $campo) {
             if ($request->hasFile($campo)) {
-                $archivos[$campo] = $request->file($campo)->store('archivos');
+                // Guarda solo el nombre del archivo, no la ruta completa
+                $path = $request->file($campo)->store('archivos');
+                $archivos[$campo] = basename($path);
             }
         }
 
@@ -135,15 +149,23 @@ class PostulacionController extends Controller
             $postulacion->id_universidad = $request->id_universidad;
             $postulacion->id_programa = $request->id_programa;
             $postulacion->id_sisben = $request->id_sisben;
-            $postulacion->id_nota = $request->id_nota;
             $postulacion->id_pregunta = $pregunta->id_pregunta;
             $postulacion->fecha_postulacion = $request->fecha_postulacion;
+            $postulacion->promedio = $request->promedio;
             $postulacion->save();
+
+            // Guardar la información de los documentos en la tabla documentos_postulacion
+            foreach ($archivos as $tipo => $ruta) {
+                \App\Models\DocumentosPostulacion::create([
+                    'id_postulacion' => $postulacion->id_postulacion,
+                    'tipo_documento' => $tipo,
+                    'ruta' => $ruta, // solo el nombre del archivo
+                    'verificado' => 0,
+                ]);
+            }
 
             // Confirmar la transacción
             DB::commit();
-
-            // Puedes guardar las rutas de los archivos en la base de datos si lo necesitas
 
             return redirect()->route('user.dashboard')
                 ->with('success', 'Postulación enviada correctamente. Archivos subidos: ' . implode(', ', array_values($archivos)));
