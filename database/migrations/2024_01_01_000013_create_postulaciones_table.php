@@ -18,7 +18,7 @@ return new class extends Migration
             $table->tinyInteger('id_sisben');
             $table->unsignedBigInteger('id_nota');
             $table->unsignedBigInteger('id_pregunta');
-            $table->date('fecha_postulacion')->default(now());
+            $table->date('fecha_postulacion')->useCurrent();
             $table->timestamps();
 
             $table->foreign('id_persona')

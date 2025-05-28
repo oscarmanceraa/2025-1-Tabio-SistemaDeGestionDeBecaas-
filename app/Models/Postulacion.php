@@ -2,11 +2,30 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Persona;
+use App\Models\TipoBeneficio;
+use App\Models\Universidad;
+use App\Models\Programa;
+use App\Models\Sisben;
+use App\Models\Nota;
+use App\Models\Pregunta;
+use App\Models\Resultado;
+use App\Models\Beneficiario;
 
 class Postulacion extends Model
 {
+    use HasFactory;
+
+    /**
+     * Obtiene los documentos asociados a la postulación.
+     */
+    public function documentos()
+    {
+        return $this->hasMany(\App\Models\DocumentosPostulacion::class, 'id_postulacion');
+    }
     use HasFactory;
 
     /**
@@ -36,9 +55,9 @@ class Postulacion extends Model
         'id_universidad',
         'id_programa',
         'id_sisben',
-        'id_nota',
         'id_pregunta',
         'fecha_postulacion',
+        'promedio',
     ];
 
     /**
@@ -81,13 +100,6 @@ class Postulacion extends Model
         return $this->belongsTo(Sisben::class, 'id_sisben');
     }
 
-    /**
-     * Obtiene la nota asociada a la postulación.
-     */
-    public function nota()
-    {
-        return $this->belongsTo(Nota::class, 'id_nota');
-    }
 
     /**
      * Obtiene las preguntas asociadas a la postulación.
@@ -103,6 +115,14 @@ class Postulacion extends Model
     public function resultado()
     {
         return $this->hasOne(Resultado::class, 'id_postulacion');
+    }
+
+    /**
+     * Obtiene la nota asociada a la postulación.
+     */
+    public function nota()
+    {
+        return $this->belongsTo(Nota::class, 'id_nota');
     }
 
     /**

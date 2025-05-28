@@ -12,6 +12,12 @@ class DatabaseSeeder extends Seeder
             TipoDocumentoSeeder::class,
             RolSeeder::class,
             EstadoSeeder::class,
+            SisbenSeeder::class,
+            UniversidadSeeder::class,
+            ProgramaSeeder::class,
+            TipoBeneficioSeeder::class,
+            EvaluadorSeeder::class, // Usuario evaluador
+            AdminUserSeeder::class, // Usuario administrador
         ]);
     }
 }

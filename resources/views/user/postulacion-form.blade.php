@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
             <div class="card">
-                <div class="card-header">{{ __('Formulario de Postulación') }}</div>
+                <div class="card-header">Formulario de Postulación</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('postulaciones.store') }}">
@@ -13,7 +13,7 @@
 
                         <!-- Persona -->
                         <div class="form-group row mb-3">
-                            <label for="id_persona" class="col-md-4 col-form-label text-md-right">{{ __('Persona') }}</label>
+                            <label for="id_persona" class="col-md-4 col-form-label text-md-right">Persona</label>
                             <div class="col-md-6">
                                 <select id="id_persona" class="form-control @error('id_persona') is-invalid @enderror" name="id_persona" required>
                                     <option value="">Seleccione una persona</option>
@@ -31,7 +31,7 @@
 
                         <!-- Tipo de Beneficio -->
                         <div class="form-group row mb-3">
-                            <label for="id_tipo_beneficio" class="col-md-4 col-form-label text-md-right">{{ __('Tipo de Beneficio') }}</label>
+                            <label for="id_tipo_beneficio" class="col-md-4 col-form-label text-md-right">Tipo de Beneficio</label>
                             <div class="col-md-6">
                                 <select id="id_tipo_beneficio" class="form-control @error('id_tipo_beneficio') is-invalid @enderror" name="id_tipo_beneficio" required>
                                     <option value="">Seleccione un tipo de beneficio</option>
@@ -49,7 +49,7 @@
 
                         <!-- Cantidad de Postulaciones -->
                         <div class="form-group row mb-3">
-                            <label for="cantidad_postulaciones" class="col-md-4 col-form-label text-md-right">{{ __('Cantidad de Postulaciones') }}</label>
+                            <label for="cantidad_postulaciones" class="col-md-4 col-form-label text-md-right">Cantidad de Postulaciones</label>
                             <div class="col-md-6">
                                 <input id="cantidad_postulaciones" type="number" min="1" max="10" class="form-control @error('cantidad_postulaciones') is-invalid @enderror" name="cantidad_postulaciones" value="{{ old('cantidad_postulaciones', 1) }}" required>
                                 @error('cantidad_postulaciones')
@@ -62,7 +62,7 @@
 
                         <!-- Semestre -->
                         <div class="form-group row mb-3">
-                            <label for="semestre" class="col-md-4 col-form-label text-md-right">{{ __('Semestre') }}</label>
+                            <label for="semestre" class="col-md-4 col-form-label text-md-right">Semestre</label>
                             <div class="col-md-6">
                                 <input id="semestre" type="number" min="1" max="12" class="form-control @error('semestre') is-invalid @enderror" name="semestre" value="{{ old('semestre') }}" required>
                                 @error('semestre')
@@ -75,7 +75,7 @@
 
                         <!-- Universidad -->
                         <div class="form-group row mb-3">
-                            <label for="id_universidad" class="col-md-4 col-form-label text-md-right">{{ __('Universidad') }}</label>
+                            <label for="id_universidad" class="col-md-4 col-form-label text-md-right">Universidad</label>
                             <div class="col-md-6">
                                 <select id="id_universidad" class="form-control @error('id_universidad') is-invalid @enderror" name="id_universidad" required>
                                     <option value="">Seleccione una universidad</option>
@@ -93,7 +93,7 @@
 
                         <!-- Programa -->
                         <div class="form-group row mb-3">
-                            <label for="id_programa" class="col-md-4 col-form-label text-md-right">{{ __('Programa') }}</label>
+                            <label for="id_programa" class="col-md-4 col-form-label text-md-right">Programa</label>
                             <div class="col-md-6">
                                 <select id="id_programa" class="form-control @error('id_programa') is-invalid @enderror" name="id_programa" required>
                                     <option value="">Seleccione un programa</option>
@@ -109,7 +109,7 @@
 
                         <!-- Sisben -->
                         <div class="form-group row mb-3">
-                            <label for="id_sisben" class="col-md-4 col-form-label text-md-right">{{ __('Categoría Sisben') }}</label>
+                            <label for="id_sisben" class="col-md-4 col-form-label text-md-right">Categoría Sisben</label>
                             <div class="col-md-6">
                                 <select id="id_sisben" class="form-control @error('id_sisben') is-invalid @enderror" name="id_sisben" required>
                                     <option value="">Seleccione categoría Sisben</option>
@@ -125,17 +125,12 @@
                             </div>
                         </div>
 
-                        <!-- Nota -->
+                        <!-- Promedio Ponderado -->
                         <div class="form-group row mb-3">
-                            <label for="id_nota" class="col-md-4 col-form-label text-md-right">{{ __('Nota Promedio') }}</label>
+                            <label for="promedio" class="col-md-4 col-form-label text-md-right">Promedio Ponderado</label>
                             <div class="col-md-6">
-                                <select id="id_nota" class="form-control @error('id_nota') is-invalid @enderror" name="id_nota" required>
-                                    <option value="">Seleccione nota registrada</option>
-                                    @foreach($notas as $nota)
-                                        <option value="{{ $nota->id_nota }}">{{ $nota->promedio }}</option>
-                                    @endforeach
-                                </select>
-                                @error('id_nota')
+                                <input id="promedio" type="number" step="0.01" min="0" max="5" class="form-control @error('promedio') is-invalid @enderror" name="promedio" value="{{ old('promedio') }}" required placeholder="Ejemplo: 4.50">
+                                @error('promedio')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -145,7 +140,7 @@
 
                         <!-- Preguntas -->
                         <div class="form-group row mb-3">
-                            <label class="col-md-4 col-form-label text-md-right">{{ __('Información Adicional') }}</label>
+                            <label class="col-md-4 col-form-label text-md-right">Información Adicional</label>
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-body">
@@ -226,7 +221,7 @@
 
                         <!-- Fecha de Postulación -->
                         <div class="form-group row mb-3">
-                            <label for="fecha_postulacion" class="col-md-4 col-form-label text-md-right">{{ __('Fecha de Postulación') }}</label>
+                            <label for="fecha_postulacion" class="col-md-4 col-form-label text-md-right">Fecha de Postulación</label>
                             <div class="col-md-6">
                                 <input id="fecha_postulacion" type="date" class="form-control @error('fecha_postulacion') is-invalid @enderror" name="fecha_postulacion" value="{{ old('fecha_postulacion', date('Y-m-d')) }}" required>
                                 @error('fecha_postulacion')
@@ -239,8 +234,8 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Enviar Postulación') }}
+                                <button type="submit" class="btn btn-primary" @if($notas->isEmpty()) disabled @endif>
+                                    Enviar Postulación
                                 </button>
                             </div>
                         </div>

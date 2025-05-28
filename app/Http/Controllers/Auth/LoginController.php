@@ -1,35 +1,47 @@
 <?php
-
 namespace App\Http\Controllers\Auth;
+
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;  // Añade esta línea
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
 
-    //redirecciona segun el rol
-    protected function redirectTo()
+    /**
+     * Muestra el formulario de login.
+     */
+    public function showLoginForm()
     {
-        $user = auth()->user();
-        $rol = DB::table('users')->where('id_user', $user->id_user)->value('id_rol');
-
-        switch ($rol) {
-            case 1:
-                return '/admin/dashboard';
-            case 2:
-                return '/user/dashboard';
-            case 3:
-                return '/evaluador/dashboard';
-            default:
-                return '/home';
-        }
+        return view('auth.login');
     }
 
+    //redirecciona segun el rol
+/**
+ * Redirige al dashboard correspondiente después del login según el rol del usuario.
+ */
+protected function authenticated(Request $request, $user)
+{
+    $rol = DB::table('users')->where('id_user', $user->id_user)->value('id_rol');
+
+    switch ($rol) {
+        case 1:
+            return redirect()->route('admin.dashboard');
+        case 2:
+            return redirect()->route('user.dashboard');
+        case 3:
+            return redirect()->route('evaluador.dashboard');
+        default:
+            Auth::logout();
+            return redirect()->route('login')->withErrors([
+                'error' => 'Tu cuenta no tiene un rol válido asignado.'
+            ]);
+    }
+}
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
