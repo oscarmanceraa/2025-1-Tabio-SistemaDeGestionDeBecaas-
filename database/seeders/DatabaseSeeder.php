@@ -16,7 +16,8 @@ class DatabaseSeeder extends Seeder
             UniversidadSeeder::class,
             ProgramaSeeder::class,
             TipoBeneficioSeeder::class,
-            EvaluadorSeeder::class, // <-- Agregado para crear usuario evaluador
+            EvaluadorSeeder::class, // Usuario evaluador
+            AdminUserSeeder::class, // Usuario administrador
         ]);
     }
 }

@@ -1,9 +1,3 @@
-// Rutas para gestión de evaluadores por el admin
-Route::middleware(['auth', 'role:1'])->group(function () {
-    Route::get('/admin/evaluadores', [App\Http\Controllers\AdminEvaluadorController::class, 'index'])->name('admin.evaluadores.index');
-    Route::post('/admin/evaluadores', [App\Http\Controllers\AdminEvaluadorController::class, 'store'])->name('admin.evaluadores.store');
-    Route::delete('/admin/evaluadores/{id}', [App\Http\Controllers\AdminEvaluadorController::class, 'destroy'])->name('admin.evaluadores.destroy');
-});
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -46,8 +40,16 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.dashboard');
     })->middleware('role:1')->name('admin.dashboard');
 
+
     // Rutas de Usuario
     Route::get('/user/dashboard', [App\Http\Controllers\UserDashboardController::class, 'dashboard'])->middleware('role:2')->name('user.dashboard');
+
+    // Gestión de Evaluadores (Admin)
+    Route::middleware('role:1')->group(function () {
+        Route::get('/admin/evaluadores', [\App\Http\Controllers\AdminEvaluadorController::class, 'index'])->name('admin.evaluadores.index');
+        Route::post('/admin/evaluadores', [\App\Http\Controllers\AdminEvaluadorController::class, 'store'])->name('admin.evaluadores.store');
+        Route::delete('/admin/evaluadores/{id}', [\App\Http\Controllers\AdminEvaluadorController::class, 'destroy'])->name('admin.evaluadores.destroy');
+    });
 
     // Rutas de Postulaciones para Usuarios
     Route::middleware('role:2')->group(function () {

@@ -17,7 +17,7 @@ class EvaluadorSeeder extends Seeder
             'segundo_nombre' => null,
             'primer_apellido' => 'Luador',
             'segundo_apellido' => null,
-            'numero_documento' => '987654321',
+            'numero_documento' => '987654321EVAL', // Unico para evitar conflicto
             'fecha_exp_documento' => '2000-01-01',
             'direccion' => 'Calle Evaluador 123',
             'observaciones' => null,
