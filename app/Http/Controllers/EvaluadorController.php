@@ -3,6 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Beneficiario;
+use App\Models\Postulacion;
+use App\Models\Persona;
+use App\Models\TipoBeneficio;
+use App\Models\Universidad;
+use App\Models\Programa;
+use App\Models\Sisben;
+use App\Models\Nota;
+use App\Models\Pregunta;
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use App\Models\Postulacion;
 use App\Models\Persona;
 use App\Models\TipoBeneficio;

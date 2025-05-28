@@ -2,8 +2,18 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Persona;
+use App\Models\TipoBeneficio;
+use App\Models\Universidad;
+use App\Models\Programa;
+use App\Models\Sisben;
+use App\Models\Nota;
+use App\Models\Pregunta;
+use App\Models\Resultado;
+use App\Models\Beneficiario;
 
 class Postulacion extends Model
 {

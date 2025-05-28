@@ -44,10 +44,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/evaluador/dashboard', [\App\Http\Controllers\EvaluadorController::class, 'dashboard'])->middleware('role:3')->name('evaluador.dashboard');
     Route::post('/evaluador/seleccionar-beneficiario/{id_postulacion}', [\App\Http\Controllers\EvaluadorController::class, 'seleccionarBeneficiario'])->middleware('role:3')->name('evaluador.seleccionarBeneficiario');
 
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/documentos/{file}', function ($file) {
-            return view('evaluador.dashboard');
-        })->name('secure.download')->middleware('can:view-document');
-        Route::post('/user/upload', [UserDocumentController::class, 'store'])->name('user.upload');
-    });
+    // Rutas para documentos y carga de archivos
+    Route::get('/documentos/{file}', function ($file) {
+        // Aquí deberías implementar la lógica real de descarga segura
+        // return response()->download(storage_path('app/documentos/' . $file));
+        return view('evaluador.dashboard');
+    })->name('secure.download')->middleware('can:view-document');
+    Route::post('/user/upload', [\App\Http\Controllers\UserDocumentController::class, 'store'])->name('user.upload');
 });

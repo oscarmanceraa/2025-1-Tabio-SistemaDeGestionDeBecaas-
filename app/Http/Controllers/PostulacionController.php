@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use App\Models\Persona;
 use App\Models\TipoBeneficio;
 use App\Models\Universidad;
@@ -11,8 +16,6 @@ use App\Models\Sisben;
 use App\Models\Nota;
 use App\Models\Postulacion;
 use App\Models\Pregunta;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class PostulacionController extends Controller
 {
