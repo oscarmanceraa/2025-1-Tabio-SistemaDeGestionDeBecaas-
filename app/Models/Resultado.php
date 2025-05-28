@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Resultado extends Model
 {
@@ -11,6 +11,7 @@ class Resultado extends Model
 
     protected $table = 'resultados';
     protected $primaryKey = 'id_resultado';
+
     protected $fillable = [
         'id_postulacion',
         'puntaje_total',
@@ -23,4 +24,10 @@ class Resultado extends Model
     {
         return $this->belongsTo(Postulacion::class, 'id_postulacion');
     }
+
+    public function beneficiarios()
+    {
+        return $this->hasMany(Beneficiario::class, 'id_resultado');
+    }
 }
+?>
