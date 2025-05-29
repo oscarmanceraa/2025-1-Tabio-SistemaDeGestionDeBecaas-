@@ -15,7 +15,7 @@ return new class extends Migration
             $table->tinyInteger('semestre');
             $table->unsignedBigInteger('id_universidad');
             $table->unsignedBigInteger('id_programa');
-            $table->tinyInteger('id_sisben');
+            $table->unsignedTinyInteger('id_sisben');
             $table->unsignedBigInteger('id_nota');
             $table->unsignedBigInteger('id_pregunta');
             $table->date('fecha_postulacion')->useCurrent();

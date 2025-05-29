@@ -8,7 +8,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('sisben', function (Blueprint $table) {
-            $table->tinyInteger('id_sisben')->primary();
+            $table->tinyIncrements('id_sisben');
             $table->char('letra', 1);
             $table->tinyInteger('numero');
             $table->decimal('puntaje', 5, 2);
