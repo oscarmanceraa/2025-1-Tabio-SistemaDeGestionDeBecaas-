@@ -16,6 +16,7 @@ use App\Models\Sisben;
 use App\Models\Nota;
 use App\Models\Postulacion;
 use App\Models\Pregunta;
+use App\Models\DocumentosPostulacion;
 
 class PostulacionController extends Controller
 {
@@ -32,30 +33,16 @@ class PostulacionController extends Controller
      */
     public function create()
     {
-        // Automatizar la creación de nota si no existe para el usuario autenticado
-        $idPersona = Auth::user()->id_persona;
-        // $nota = Nota::where('id_persona', $idPersona)->first();
-        // if (!$nota) {
-        //     $nota = Nota::create([
-        //         'id_persona' => $idPersona,
-        //         'promedio' => 0,
-        //         'observaciones' => 'Nota generada automáticamente para permitir postulación'
-        //     ]);
-        // }
+        // Obtener la última postulación del usuario
+        $ultimaPostulacion = Postulacion::where('id_usuario', Auth::id())
+            ->with(['pregunta', 'documentos'])
+            ->latest()
+            ->first();
 
-        $personas = Persona::all();
-        $tiposBeneficio = TipoBeneficio::all();
-        $universidades = Universidad::all();
-        $sisben = Sisben::orderBy('letra')->orderBy('numero')->get();
-        // $notas = Nota::where('id_persona', $idPersona)->get();
+        // Obtener información de la persona
+        $persona = Auth::user()->persona;
 
-        return view('user.postulacion-form', compact(
-            'personas',
-            'tiposBeneficio',
-            'universidades',
-            'sisben'
-            // , 'notas'
-        ));
+        return view('user.dashboard', compact('ultimaPostulacion', 'persona'));
     }
 
     /**
@@ -63,69 +50,24 @@ class PostulacionController extends Controller
      */
     public function store(Request $request)
     {
-        // Validar los datos del formulario y los archivos
-        $request->validate([
-            'id_persona' => 'required|exists:personas,id_persona',
-            'id_tipo_beneficio' => 'required|exists:tipos_beneficio,id_tipo_beneficio',
-            'cantidad_postulaciones' => 'required|integer|min:1|max:10',
-            'semestre' => 'required|integer|min:1|max:12',
-            'id_universidad' => 'required|exists:universidades,id_universidad',
-            'id_programa' => 'required|exists:programas,id_programa',
-            'id_sisben' => 'required|exists:sisben,id_sisben',
-            'promedio' => 'required|numeric|min:0|max:5',
-            'fecha_postulacion' => 'required|date',
-            'horas_sociales' => 'sometimes|boolean',
-            'cantidad_horas_sociales' => 'nullable|required_if:horas_sociales,1|integer',
-            'obs_horas' => 'nullable|string|max:255',
-            'discapacidad' => 'sometimes|boolean',
-            'tipo_discapacidad' => 'nullable|required_if:discapacidad,1|string|max:100',
-            'obs_discapacidad' => 'nullable|string|max:255',
-            'colegio_publico' => 'sometimes|boolean',
-            'nombre_colegio' => 'nullable|required_if:colegio_publico,1|string|max:255',
-            'madre_cabeza_familia' => 'sometimes|boolean',
-            'victima_conflicto' => 'sometimes|boolean',
-            'declaracion_juramentada' => 'required|accepted',
-            // Validación de archivos obligatorios
-            'certificado_sisben' => 'required|file|mimes:pdf|max:10240',
-            'acta_grado' => 'required|file|mimes:pdf|max:10240',
-            'certificado_notas' => 'required|file|mimes:pdf|max:10240',
-            // El certificado de discapacidad solo es obligatorio si se marca discapacidad
-            'certificado_discapacidad' => 'required_if:discapacidad,1|file|mimes:pdf|max:10240',
-        ], [
-            'promedio.required' => 'Debes ingresar tu promedio ponderado.',
-            'promedio.numeric' => 'El promedio debe ser un número.',
-            'promedio.min' => 'El promedio no puede ser menor a 0.',
-            'promedio.max' => 'El promedio no puede ser mayor a 5.',
-            'certificado_sisben.required' => 'Debes adjuntar el certificado Sisbén.',
-            'acta_grado.required' => 'Debes adjuntar el acta de grado.',
-            'certificado_notas.required' => 'Debes adjuntar el certificado de notas.',
-            'certificado_discapacidad.required_if' => 'Debes adjuntar el certificado de discapacidad si marcaste que tienes discapacidad.'
-        ]);
-
-        // Guardar archivos y asociarlos a la postulación
-        $archivos = [];
-        $nombresCampos = [
-            'certificado_sisben',
-            'acta_grado',
-            'certificado_notas',
-        ];
-        // Solo guardar certificado_discapacidad si se marcó discapacidad
-        if ($request->has('discapacidad')) {
-            $nombresCampos[] = 'certificado_discapacidad';
-        }
-
-        foreach ($nombresCampos as $campo) {
-            if ($request->hasFile($campo)) {
-                // Guarda solo el nombre del archivo, no la ruta completa
-                $path = $request->file($campo)->store('archivos');
-                $archivos[$campo] = basename($path);
-            }
-        }
-
-        // Iniciar una transacción de base de datos
-        DB::beginTransaction();
         try {
-            // Crear primero la pregunta
+            DB::beginTransaction();
+
+            // Validar los campos requeridos
+            $request->validate([
+                'id_universidad' => 'required|exists:universidades,id_universidad',
+                'id_programa' => 'required|exists:programas,id_programa',
+                'id_sisben' => 'required|exists:sisben,id_sisben',
+                'fecha_postulacion' => 'required|date',
+                'promedio' => 'required|numeric|min:0|max:5',
+                'declaracion_juramentada' => 'required|accepted'
+            ]);
+
+            // Obtener el usuario autenticado y su persona
+            $user = Auth::user();
+            $persona = $user->persona;
+
+            // Crear la pregunta primero
             $pregunta = new Pregunta();
             $pregunta->horas_sociales = $request->has('horas_sociales') ? 1 : 0;
             $pregunta->cantidad_horas_sociales = $request->cantidad_horas_sociales;
@@ -142,38 +84,74 @@ class PostulacionController extends Controller
 
             // Crear la postulación
             $postulacion = new Postulacion();
-            $postulacion->id_persona = $request->id_persona;
-            $postulacion->id_tipo_beneficio = $request->id_tipo_beneficio;
-            $postulacion->cantidad_postulaciones = $request->cantidad_postulaciones;
-            $postulacion->semestre = $request->semestre;
+            $postulacion->id_persona = $persona->id_persona;
+            $postulacion->id_tipo_beneficio = 1; // Por defecto el primer tipo
+            $postulacion->cantidad_postulaciones = 1;
+            $postulacion->semestre = 1; // Por defecto primer semestre
             $postulacion->id_universidad = $request->id_universidad;
             $postulacion->id_programa = $request->id_programa;
             $postulacion->id_sisben = $request->id_sisben;
             $postulacion->id_pregunta = $pregunta->id_pregunta;
             $postulacion->fecha_postulacion = $request->fecha_postulacion;
             $postulacion->promedio = $request->promedio;
+            $postulacion->id_convocatoria = $request->convocatoria_activa->id_convocatoria;
             $postulacion->save();
 
-            // Guardar la información de los documentos en la tabla documentos_postulacion
-            foreach ($archivos as $tipo => $ruta) {
-                \App\Models\DocumentosPostulacion::create([
-                    'id_postulacion' => $postulacion->id_postulacion,
-                    'tipo_documento' => $tipo,
-                    'ruta' => $ruta, // solo el nombre del archivo
-                    'verificado' => 0,
-                ]);
+            // Procesar documentos
+            $tiposDocumento = [
+                'documento_identidad',
+                'certificado_sisben',
+                'acta_grado',
+                'certificado_notas',
+                'comprobante_domicilio',
+                'certificado_discapacidad'
+            ];
+
+            foreach ($tiposDocumento as $tipo) {
+                if ($request->hasFile($tipo)) {
+                    $this->guardarDocumento($request->file($tipo), $tipo, $postulacion->id_postulacion);
+                } elseif ($request->has('ultima_postulacion')) {
+                    // Copiar el último documento si existe
+                    $this->copiarUltimoDocumento($tipo, $postulacion->id_postulacion);
+                }
             }
 
-            // Confirmar la transacción
             DB::commit();
-
-            return redirect()->route('user.dashboard')
-                ->with('success', 'Postulación enviada correctamente. Archivos subidos: ' . implode(', ', array_values($archivos)));
-
+            return redirect()->back()->with('success', 'Postulación creada exitosamente.');
         } catch (\Exception $e) {
-            // Revertir la transacción en caso de error
             DB::rollBack();
-            return back()->withInput()->withErrors(['error' => 'Error al guardar la postulación: ' . $e->getMessage()]);
+            return redirect()->back()->with('error', 'Error al crear la postulación: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    private function guardarDocumento($archivo, $tipo, $idPostulacion)
+    {
+        $ruta = $archivo->store('archivos', 'secure');
+        
+        DocumentosPostulacion::create([
+            'id_postulacion' => $idPostulacion,
+            'tipo_documento' => $tipo,
+            'ruta' => $ruta,
+            'verificado' => false
+        ]);
+    }
+
+    private function copiarUltimoDocumento($tipo, $idPostulacionNueva)
+    {
+        $ultimoDocumento = DocumentosPostulacion::where('tipo_documento', $tipo)
+            ->whereHas('postulacion', function($query) {
+                $query->where('id_usuario', Auth::id());
+            })
+            ->latest()
+            ->first();
+
+        if ($ultimoDocumento) {
+            DocumentosPostulacion::create([
+                'id_postulacion' => $idPostulacionNueva,
+                'tipo_documento' => $tipo,
+                'ruta' => $ultimoDocumento->ruta,
+                'verificado' => false
+            ]);
         }
     }
 

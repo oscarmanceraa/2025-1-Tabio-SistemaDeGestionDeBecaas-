@@ -17,6 +17,10 @@ class DocumentosPostulacion extends Model
         'verificado',
     ];
 
+    protected $casts = [
+        'verificado' => 'boolean',
+    ];
+
     public function postulacion()
     {
         return $this->belongsTo(Postulacion::class, 'id_postulacion');

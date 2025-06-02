@@ -40,7 +40,7 @@ class Programa extends Model
      */
     public function universidad()
     {
-        return $this->belongsTo(Universidad::class, 'id_universidad');
+        return $this->belongsTo(Universidad::class, 'id_universidad', 'id_universidad');
     }
 
     /**
@@ -48,6 +48,6 @@ class Programa extends Model
      */
     public function postulaciones()
     {
-        return $this->hasMany(Postulacion::class, 'id_programa');
+        return $this->hasMany(Postulacion::class, 'id_programa', 'id_programa');
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
             $table->id('id_user');
             $table->unsignedBigInteger('id_persona');
             $table->tinyInteger('id_rol');
-            $table->unsignedBigInteger('id_estado');
+            $table->unsignedBigInteger('id_estado')->default(1);
             $table->string('codigo', 30)->unique();
             $table->string('email')->unique();
             $table->string('username', 100)->unique();

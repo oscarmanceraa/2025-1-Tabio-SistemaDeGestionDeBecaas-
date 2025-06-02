@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Models\Beneficiario;
 use App\Models\Postulacion;
 use App\Models\Persona;
@@ -18,71 +14,146 @@ use App\Models\Programa;
 use App\Models\Sisben;
 use App\Models\Nota;
 use App\Models\Pregunta;
-
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
-use App\Models\Postulacion;
-use App\Models\Persona;
-use App\Models\TipoBeneficio;
-use App\Models\Universidad;
-use App\Models\Programa;
-use App\Models\Sisben;
-use App\Models\Nota;
-use App\Models\Pregunta;
+use App\Models\Convocatoria;
+use App\Models\Resultado;
 
 class EvaluadorController extends Controller
 {
     public function dashboard()
     {
-        // Traer todas las postulaciones con relaciones para mostrar al evaluador
-        $postulaciones = Postulacion::with([
-            'persona',
-            'tipoBeneficio',
-            'universidad',
-            'programa',
-            'sisben',
-            'nota',
-            'pregunta',
-            'documentos'
-        ])->orderBy('created_at', 'desc')->get();
+        $postulaciones = Postulacion::with(['persona', 'tipoBeneficio', 'documentos', 'resultado', 'beneficiario'])
+            ->orderBy('fecha_postulacion', 'desc')
+            ->get();
 
         return view('evaluador.dashboard', compact('postulaciones'));
     }
-    /**
-     * Selecciona una postulación como beneficiario
-     */
+
+    public function toggleConvocatoria(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Log request information for debugging
+            Log::info('Toggle Convocatoria Request', [
+                'method' => $request->method(),
+                'action' => $request->input('action'),
+                'headers' => $request->headers->all()
+            ]);
+
+            // Buscar la convocatoria activa actual
+            $convocatoriaActiva = Convocatoria::where('activa', true)->first();
+
+            if ($request->input('action') === 'cerrar') {
+                if ($convocatoriaActiva) {
+                    $convocatoriaActiva->activa = false;
+                    $convocatoriaActiva->save();
+                    $mensaje = 'La convocatoria ha sido cerrada exitosamente.';
+                } else {
+                    throw new \Exception('No hay convocatoria activa para cerrar.');
+                }
+            } else {
+                // Validar los campos del formulario
+                $request->validate([
+                    'nombre' => 'required|string|max:255',
+                    'fecha_inicio' => 'required|date',
+                    'fecha_fin' => 'required|date|after:fecha_inicio',
+                    'descripcion' => 'nullable|string'
+                ]);
+
+                // Si hay una convocatoria activa, la desactivamos primero
+                if ($convocatoriaActiva) {
+                    $convocatoriaActiva->activa = false;
+                    $convocatoriaActiva->save();
+                }
+
+                // Crear nueva convocatoria
+                Convocatoria::create([
+                    'nombre' => $request->nombre,
+                    'fecha_inicio' => $request->fecha_inicio,
+                    'fecha_fin' => $request->fecha_fin,
+                    'activa' => true,
+                    'descripcion' => $request->descripcion
+                ]);
+                $mensaje = 'La convocatoria ha sido abierta exitosamente.';
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => $mensaje
+            ]);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollback();
+            Log::error('Error de validación en toggleConvocatoria: ' . $e->getMessage(), [
+                'errors' => $e->errors()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error('Error en toggleConvocatoria: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al cambiar el estado de la convocatoria: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function seleccionarBeneficiario($id_postulacion)
     {
-        // Verifica si ya existe un beneficiario para esta postulación
-        $postulacion = \App\Models\Postulacion::findOrFail($id_postulacion);
-        if ($postulacion->beneficiario) {
-            return redirect()->route('evaluador.dashboard')->with('info', 'Esta postulación ya es beneficiario.');
-        }
-
-        // Buscar el resultado asociado a la postulación
-        // Siempre calcular el puntaje en base a las preguntas y sisben al momento de seleccionar beneficiario
-        $pregunta = \App\Models\Pregunta::find($postulacion->id_pregunta);
+        $postulacion = Postulacion::findOrFail($id_postulacion);
+        
+        // Calcular puntaje basado en criterios
         $puntaje = 0;
-        if ($pregunta) {
-            $puntaje += $pregunta->horas_sociales ? 10 : 0;
-            $puntaje += $pregunta->cantidad_horas_sociales ? min($pregunta->cantidad_horas_sociales, 100) * 0.1 : 0;
-            $puntaje += $pregunta->discapacidad ? 10 : 0;
-            $puntaje += $pregunta->colegio_publico ? 5 : 0;
-            $puntaje += $pregunta->madre_cabeza_familia ? 5 : 0;
-            $puntaje += $pregunta->victima_conflicto ? 5 : 0;
-            $puntaje += $pregunta->declaracion_juramentada ? 5 : 0;
-        }
-        $sisben = \App\Models\Sisben::find($postulacion->id_sisben);
+        
+        // Sisben
+        $sisben = $postulacion->sisben;
         if ($sisben) {
-            $puntaje += max(0, 20 - $sisben->numero);
+            $puntaje += $sisben->puntaje;
         }
+        
+        // Promedio académico (asumiendo que está en escala de 0 a 5)
+        $puntaje += $postulacion->promedio * 10; // Multiplicar por 10 para dar más peso
+        
+        // Preguntas adicionales
+        $pregunta = $postulacion->pregunta;
+        if ($pregunta) {
+            if ($pregunta->horas_sociales) {
+                $puntaje += 5;
+            }
+            if ($pregunta->discapacidad) {
+                $puntaje += 10;
+            }
+            if ($pregunta->colegio_publico) {
+                $puntaje += 5;
+            }
+            if ($pregunta->madre_cabeza_familia) {
+                $puntaje += 8;
+            }
+            if ($pregunta->victima_conflicto) {
+                $puntaje += 10;
+            }
+        }
+        
+        // Documentos verificados
+        $documentosVerificados = $postulacion->documentos()->where('verificado', true)->count();
+        $puntaje += $documentosVerificados * 2;
 
         try {
+            DB::beginTransaction();
+
             // Buscar o crear el resultado asociado a la postulación y actualizar puntaje
-            $resultado = \App\Models\Resultado::where('id_postulacion', $id_postulacion)->first();
+            $resultado = Resultado::where('id_postulacion', $id_postulacion)->first();
             if (!$resultado) {
-                $resultado = new \App\Models\Resultado();
+                $resultado = new Resultado();
                 $resultado->id_postulacion = $id_postulacion;
             }
             $resultado->puntaje_total = $puntaje;
@@ -93,7 +164,7 @@ class EvaluadorController extends Controller
             $resultado->save();
 
             // Crear el beneficiario usando el id_resultado encontrado o recién creado
-            $beneficiario = new \App\Models\Beneficiario();
+            $beneficiario = new Beneficiario();
             $beneficiario->id_postulacion = $postulacion->id_postulacion;
             $beneficiario->id_resultado = $resultado->id_resultado;
             $beneficiario->monto_beneficio = 0; // Ajusta según lógica
@@ -103,8 +174,10 @@ class EvaluadorController extends Controller
             $beneficiario->id_estado = 1; // Ajusta según tus estados
             $beneficiario->save();
 
+            DB::commit();
             return redirect()->route('evaluador.dashboard')->with('success', 'Beneficiario seleccionado correctamente. El resultado fue generado automáticamente.');
         } catch (\Exception $e) {
+            DB::rollback();
             return back()->with('error', 'Error al guardar resultado o beneficiario: ' . $e->getMessage());
         }
     }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Persona;
@@ -14,18 +13,10 @@ use App\Models\Nota;
 use App\Models\Pregunta;
 use App\Models\Resultado;
 use App\Models\Beneficiario;
+use App\Models\Convocatoria;
 
 class Postulacion extends Model
 {
-    use HasFactory;
-
-    /**
-     * Obtiene los documentos asociados a la postulación.
-     */
-    public function documentos()
-    {
-        return $this->hasMany(\App\Models\DocumentosPostulacion::class, 'id_postulacion');
-    }
     use HasFactory;
 
     /**
@@ -58,6 +49,7 @@ class Postulacion extends Model
         'id_pregunta',
         'fecha_postulacion',
         'promedio',
+        'id_convocatoria'
     ];
 
     /**
@@ -65,7 +57,7 @@ class Postulacion extends Model
      */
     public function persona()
     {
-        return $this->belongsTo(Persona::class, 'id_persona');
+        return $this->belongsTo(Persona::class, 'id_persona', 'id_persona');
     }
 
     /**
@@ -73,7 +65,7 @@ class Postulacion extends Model
      */
     public function tipoBeneficio()
     {
-        return $this->belongsTo(TipoBeneficio::class, 'id_tipo_beneficio');
+        return $this->belongsTo(TipoBeneficio::class, 'id_tipo_beneficio', 'id_tipo_beneficio');
     }
 
     /**
@@ -81,7 +73,7 @@ class Postulacion extends Model
      */
     public function universidad()
     {
-        return $this->belongsTo(Universidad::class, 'id_universidad');
+        return $this->belongsTo(Universidad::class, 'id_universidad', 'id_universidad');
     }
 
     /**
@@ -89,7 +81,7 @@ class Postulacion extends Model
      */
     public function programa()
     {
-        return $this->belongsTo(Programa::class, 'id_programa');
+        return $this->belongsTo(Programa::class, 'id_programa', 'id_programa');
     }
 
     /**
@@ -97,16 +89,15 @@ class Postulacion extends Model
      */
     public function sisben()
     {
-        return $this->belongsTo(Sisben::class, 'id_sisben');
+        return $this->belongsTo(Sisben::class, 'id_sisben', 'id_sisben');
     }
-
 
     /**
      * Obtiene las preguntas asociadas a la postulación.
      */
     public function pregunta()
     {
-        return $this->belongsTo(Pregunta::class, 'id_pregunta');
+        return $this->belongsTo(Pregunta::class, 'id_pregunta', 'id_pregunta');
     }
 
     /**
@@ -114,7 +105,7 @@ class Postulacion extends Model
      */
     public function resultado()
     {
-        return $this->hasOne(Resultado::class, 'id_postulacion');
+        return $this->hasOne(Resultado::class, 'id_postulacion', 'id_postulacion');
     }
 
     /**
@@ -130,6 +121,22 @@ class Postulacion extends Model
      */
     public function beneficiario()
     {
-        return $this->hasOne(Beneficiario::class, 'id_postulacion');
+        return $this->hasOne(Beneficiario::class, 'id_postulacion', 'id_postulacion');
+    }
+
+    /**
+     * Obtiene la convocatoria asociada a la postulación.
+     */
+    public function convocatoria()
+    {
+        return $this->belongsTo(Convocatoria::class, 'id_convocatoria', 'id_convocatoria');
+    }
+
+    /**
+     * Obtiene los documentos asociados a la postulación.
+     */
+    public function documentos()
+    {
+        return $this->hasMany(DocumentosPostulacion::class, 'id_postulacion', 'id_postulacion');
     }
 }
